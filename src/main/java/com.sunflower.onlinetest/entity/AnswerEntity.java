@@ -1,5 +1,6 @@
 package com.sunflower.onlinetest.entity;
 
+
 import com.sunflower.onlinetest.dao.iEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +9,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -18,29 +16,24 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
-public class UserEntity implements iEntity {
-
+@Table(name = "answer")
+public class AnswerEntity implements iEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "full_name")
-    private String fullName;
+    private String content;
 
-    @Email
-    @Column(unique = true)
-    private String email;
+    @Column(name = "right_answer", columnDefinition = "boolean default false")
+    private boolean rightAnswer;
 
-    @NotBlank
-    @NotNull
-    private String password;
+    //  TODO  how to save file
+//    @Column(name = "attached_file")
+//    private File attachedFile;
 
     @CreationTimestamp
     @Column(name = "created_date")
-    private LocalDate createdDate;
+    private LocalDate createDate;
 
     @CreationTimestamp
     @Column(name = "modified_date")

@@ -8,9 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -18,25 +15,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
-public class UserEntity implements iEntity {
-
+@Table(name = "topic")
+public class TopicEntity implements iEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "full_name")
-    private String fullName;
+    private String name;
 
-    @Email
-    @Column(unique = true)
-    private String email;
+    private String description;
 
-    @NotBlank
-    @NotNull
-    private String password;
+    @ManyToOne
+    @JoinColumn(name = "owner_id", nullable = false)
+    private UserEntity owner;
 
     @CreationTimestamp
     @Column(name = "created_date")

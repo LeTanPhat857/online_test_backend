@@ -7,7 +7,7 @@ import com.sunflower.onlinetest.rest.request.SignupRequest;
 import com.sunflower.onlinetest.service.AuthenticationService;
 
 import javax.inject.Inject;
-import java.util.Optional;
+import java.util.Objects;
 
 public class AuthenticationServiceImpl implements AuthenticationService {
 
@@ -24,9 +24,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (loginRequest.getEmail().isEmpty() || loginRequest.getPassword().isEmpty()) {
             throw new RuntimeException(INFORMATION_IS_NOT_VALID);
         }
-        Optional<UserEntity> processingUser = userDAO.findByEmail(loginRequest.getEmail());
-        if (processingUser.isPresent() && processingUser.get().getPassword().equals(loginRequest.getPassword())) {
-            return processingUser.get();
+        UserEntity processingUser = userDAO.findByEmail(loginRequest.getEmail());
+        if (Objects.nonNull(processingUser) && processingUser.getPassword().equals(loginRequest.getPassword())) {
+            return processingUser;
         } else {
             throw new RuntimeException(EMAIL_OR_PASSWORD_IS_NOT_CORRECT);
         }
@@ -37,8 +37,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         if (signupRequest.getFullName().isEmpty() || signupRequest.getEmail().isEmpty() || signupRequest.getPassword().isEmpty()) {
             throw new RuntimeException(INFORMATION_IS_NOT_VALID);
         }
-        Optional<UserEntity> processingUser = userDAO.findByEmail(signupRequest.getEmail());
-        if (processingUser.isPresent()) {
+        UserEntity processingUser = userDAO.findByEmail(signupRequest.getEmail());
+        if (Objects.nonNull(processingUser)) {
             throw new RuntimeException(EMAIL_IS_EXISTED);
         }
         try {

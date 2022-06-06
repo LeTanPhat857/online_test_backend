@@ -25,23 +25,30 @@ public class GenericDAO<T extends iEntity> {
         return this.entityManager.find(getPersistenceClass(), id);
     }
 
-    public void save(T entity) {
+    public T save(T entity) {
         this.entityManager.persist(entity);
+        return entity;
     }
 
     public T update(T entity) {
         return this.entityManager.merge(entity);
     }
 
-    public void remove(Integer id) {
+    public T remove(Integer id) {
         T entity = findById(id);
         if (entity != null) {
             this.entityManager.remove(entity);
+            return entity;
         }
+        return null;
     }
 
-    public void removeEntity(T entity) {
-        this.entityManager.remove(entityManager.contains(entity) ? entity : update(entity));
+    public T removeEntity(T entity) {
+        if (!entityManager.contains(entity)) {
+            update(entity);
+        }
+        entityManager.remove(entity);
+        return entity;
     }
 
     public TypedQuery<T> createTypeQuery(String query) {

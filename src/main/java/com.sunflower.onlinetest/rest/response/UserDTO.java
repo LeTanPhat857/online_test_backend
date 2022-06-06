@@ -1,4 +1,4 @@
-package com.sunflower.onlinetest.service.response;
+package com.sunflower.onlinetest.rest.response;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,5 +8,4 @@ import lombok.Setter;
 public class UserDTO {
     private String fullName;
     private String email;
-    private String jwt;
 }

@@ -1,12 +1,14 @@
 package com.sunflower.onlinetest.rest;
 
 import com.sunflower.onlinetest.entity.UserEntity;
+import com.sunflower.onlinetest.rest.mapper.UserMapper;
 import com.sunflower.onlinetest.rest.request.LoginRequest;
 import com.sunflower.onlinetest.rest.request.SignupRequest;
+import com.sunflower.onlinetest.rest.response.JwtDTO;
+import com.sunflower.onlinetest.rest.response.ResponseObjectWithJWT;
+import com.sunflower.onlinetest.rest.response.UserDTO;
 import com.sunflower.onlinetest.service.AuthenticationService;
-import com.sunflower.onlinetest.service.mapper.UserEntityMapper;
-import com.sunflower.onlinetest.service.response.ResponseObject;
-import com.sunflower.onlinetest.service.response.UserDTO;
+import com.sunflower.onlinetest.service.JWTAuthenticationService;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -31,7 +33,10 @@ public class AuthenticationREST {
     private AuthenticationService authenticationService;
 
     @Inject
-    private UserEntityMapper userEntityMapper;
+    private UserMapper userEntityMapper;
+
+    @Inject
+    private JWTAuthenticationService jwtAuthenticationService;
 
     @POST
     @Path("login")
@@ -39,16 +44,17 @@ public class AuthenticationREST {
         try {
             UserEntity userEntity = authenticationService.login(loginRequest);
             UserDTO userDTO = userEntityMapper.toUserResponse(userEntity);
-            ResponseObject responseObject = ResponseObject.builder()
+            JwtDTO authorizedToken = jwtAuthenticationService.createAuthorizedToken(userEntity);
+            ResponseObjectWithJWT responseObject = ResponseObjectWithJWT.builder()
                     .message(SUCCESSFULLY)
                     .data(userDTO)
-                    .jwt("jwt is not available")
+                    .jwt(authorizedToken)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)
                     .build();
         } catch (Exception e) {
-            ResponseObject responseObject = ResponseObject.builder()
+            ResponseObjectWithJWT responseObject = ResponseObjectWithJWT.builder()
                     .message(e.getMessage())
                     .build();
             return Response.status(Response.Status.BAD_REQUEST)
@@ -63,16 +69,17 @@ public class AuthenticationREST {
         try {
             UserEntity userEntity = authenticationService.signup(signupRequest);
             UserDTO userDTO = userEntityMapper.toUserResponse(userEntity);
-            ResponseObject responseObject = ResponseObject.builder()
+            JwtDTO authorizedToken = jwtAuthenticationService.createAuthorizedToken(userEntity);
+            ResponseObjectWithJWT responseObject = ResponseObjectWithJWT.builder()
                     .message(SUCCESSFULLY)
                     .data(userDTO)
-                    .jwt("jwt is not available")
+                    .jwt(authorizedToken)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)
                     .build();
         } catch (Exception e) {
-            ResponseObject responseObject = ResponseObject.builder()
+            ResponseObjectWithJWT responseObject = ResponseObjectWithJWT.builder()
                     .message(e.getMessage())
                     .build();
             return Response.status(Response.Status.BAD_REQUEST)

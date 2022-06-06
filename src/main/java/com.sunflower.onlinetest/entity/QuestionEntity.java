@@ -8,35 +8,33 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "user")
-public class UserEntity implements iEntity {
-
+@Table(name = "question")
+public class QuestionEntity implements iEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotNull
-    @NotBlank
-    @Column(name = "full_name")
-    private String fullName;
+    private String content;
 
-    @Email
-    @Column(unique = true)
-    private String email;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "question_id")
+    private List<AnswerEntity> answers;
 
-    @NotBlank
-    @NotNull
-    private String password;
+    //  TODO  how to save file
+//    @Colum/n(name = "attached_file")
+//    private File attachedFile;
+
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
+    private TopicEntity topic;
 
     @CreationTimestamp
     @Column(name = "created_date")
