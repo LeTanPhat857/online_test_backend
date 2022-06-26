@@ -1,12 +1,14 @@
 package com.sunflower.onlinetest.dao;
 
 
+import com.sunflower.onlinetest.entity.iEntity;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.lang.reflect.ParameterizedType;
 
-public class GenericDAO<T extends iEntity> {
+public abstract class GenericDAO<T extends iEntity> {
 
     private Class<T> persistenceClass;
 
@@ -19,6 +21,10 @@ public class GenericDAO<T extends iEntity> {
                     .getActualTypeArguments()[0];
         }
         return this.persistenceClass;
+    }
+
+    public EntityManager getEntityManager() {
+        return this.entityManager;
     }
 
     public T findById(Integer id) {

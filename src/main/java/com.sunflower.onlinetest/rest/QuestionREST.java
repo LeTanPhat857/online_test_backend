@@ -1,9 +1,11 @@
 package com.sunflower.onlinetest.rest;
 
 import com.sunflower.onlinetest.rest.mapper.QuestionMapper;
+import com.sunflower.onlinetest.rest.mapper.TopicQuestionMapper;
 import com.sunflower.onlinetest.rest.request.QuestionRequest;
 import com.sunflower.onlinetest.rest.response.QuestionDTO;
 import com.sunflower.onlinetest.rest.response.ResponseObject;
+import com.sunflower.onlinetest.rest.response.TopicQuestionDTO;
 import com.sunflower.onlinetest.service.JWTAuthenticationService;
 import com.sunflower.onlinetest.service.QuestionService;
 import com.sunflower.onlinetest.service.TopicService;
@@ -42,6 +44,9 @@ public class QuestionREST {
     @Inject
     private QuestionMapper questionMapper;
 
+    @Inject
+    private TopicQuestionMapper topicQuestionMapper;
+
     @GET
     @Path("")
     public Response getAllByTopicId() {
@@ -49,10 +54,10 @@ public class QuestionREST {
             Integer topicId = CustomBase64.decodeAsInteger(topicCode);
             jwtAuthenticationService.checkAuthorizedToken(authorization);
             topicService.checkUserOwnTopic(jwtAuthenticationService.getUserId(authorization), topicId);
-            List<QuestionDTO> questionDTOS = questionMapper.entityToDTOs(questionService.getAllByTopicId(topicId));
+            TopicQuestionDTO topicQuestionDTO = topicQuestionMapper.entityToDTO(topicService.getByCode(topicCode));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
-                    .data(questionDTOS)
+                    .data(topicQuestionDTO)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)

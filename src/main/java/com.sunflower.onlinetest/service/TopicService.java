@@ -2,7 +2,6 @@ package com.sunflower.onlinetest.service;
 
 import com.sunflower.onlinetest.entity.TopicEntity;
 import com.sunflower.onlinetest.rest.request.TopicRequest;
-import com.sunflower.onlinetest.rest.response.TopicDTO;
 
 import java.util.List;
 

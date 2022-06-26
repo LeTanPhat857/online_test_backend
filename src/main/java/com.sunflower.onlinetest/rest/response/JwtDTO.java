@@ -8,8 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class JwtDTO {
-
     private String token;
-
     private int timeToLive;
 }

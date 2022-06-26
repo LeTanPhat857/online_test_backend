@@ -13,12 +13,13 @@ public interface TopicMapper {
     @Mappings({
             @Mapping(target = "createdDate", source = "topicEntity.createdDate", dateFormat = "dd/MM/yyyy hh:mm:ss")
     })
-    TopicDTO entityToDTO(TopicEntity topicEntity);
+
     @AfterMapping
     default void convertIdToCode(TopicEntity topicEntity, @MappingTarget TopicDTO topicDTO) {
-        System.out.println(topicEntity.getId());
         topicDTO.setCode(CustomBase64.encode(String.valueOf(topicEntity.getId())));
     }
+
+    TopicDTO entityToDTO(TopicEntity topicEntity);
 
     List<TopicDTO> entityToDTOs(List<TopicEntity> topics);
 }

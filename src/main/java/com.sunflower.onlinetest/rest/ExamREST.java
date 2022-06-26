@@ -1,11 +1,11 @@
 package com.sunflower.onlinetest.rest;
 
-import com.sunflower.onlinetest.rest.mapper.TopicMapper;
-import com.sunflower.onlinetest.rest.request.TopicRequest;
+import com.sunflower.onlinetest.rest.mapper.ExamMapper;
+import com.sunflower.onlinetest.rest.request.ExamRequest;
+import com.sunflower.onlinetest.rest.response.ExamDTO;
 import com.sunflower.onlinetest.rest.response.ResponseObject;
-import com.sunflower.onlinetest.rest.response.TopicDTO;
+import com.sunflower.onlinetest.service.ExamService;
 import com.sunflower.onlinetest.service.JWTAuthenticationService;
-import com.sunflower.onlinetest.service.TopicService;
 import com.sunflower.onlinetest.util.CustomBase64;
 
 import javax.enterprise.context.RequestScoped;
@@ -16,12 +16,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-@Path("topics")
+@Path("exams")
 @RequestScoped
 @Transactional
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
-public class TopicREST {
+public class ExamREST {
 
     @HeaderParam("Authorization")
     private String authorization;
@@ -30,20 +30,20 @@ public class TopicREST {
     private JWTAuthenticationService jwtAuthenticationService;
 
     @Inject
-    private TopicService topicService;
+    private ExamService examService;
 
     @Inject
-    private TopicMapper topicMapper;
+    private ExamMapper examMapper;
 
     @GET
     @Path("")
     public Response getAllByUserId() {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
-            List<TopicDTO> topicDTOS = topicMapper.entityToDTOs(topicService.getAllByUserId(jwtAuthenticationService.getUserId(authorization)));
+            List<ExamDTO> examDTOS = examMapper.entityToDTOs(examService.getAllByUserId(jwtAuthenticationService.getUserId(authorization)));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
-                    .data(topicDTOS)
+                    .data(examDTOS)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)
@@ -63,11 +63,11 @@ public class TopicREST {
     public Response getByCode(@PathParam("code") String code) {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
-            topicService.checkUserOwnTopic(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
-            TopicDTO topicDTO = topicMapper.entityToDTO(topicService.getByCode(code));
+            examService.checkUserOwnExam(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
+            ExamDTO examDTO = examMapper.entityToDTO(examService.getByCode(code));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
-                    .data(topicDTO)
+                    .data(examDTO)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)
@@ -84,13 +84,13 @@ public class TopicREST {
 
     @PUT
     @Path("create")
-    public Response create(TopicRequest topicRequest) {
+    public Response create(ExamRequest examRequest) {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
-            TopicDTO topicDTO = topicMapper.entityToDTO(topicService.create(jwtAuthenticationService.getUserId(authorization), topicRequest));
+            ExamDTO examDTO = examMapper.entityToDTO(examService.create(jwtAuthenticationService.getUserId(authorization), examRequest));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
-                    .data(topicDTO)
+                    .data(examDTO)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)
@@ -107,14 +107,14 @@ public class TopicREST {
 
     @POST
     @Path("update/{code}")
-    public Response update(@PathParam("code") String code, TopicRequest topicRequest) {
+    public Response update(@PathParam("code") String code, ExamRequest examRequest) {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
-            topicService.checkUserOwnTopic(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
-            TopicDTO topicDTO = topicMapper.entityToDTO(topicService.update(code, topicRequest));
+            examService.checkUserOwnExam(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
+            ExamDTO examDTO = examMapper.entityToDTO(examService.update(code, examRequest));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
-                    .data(topicDTO)
+                    .data(examDTO)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)
@@ -134,11 +134,11 @@ public class TopicREST {
     public Response update(@PathParam("code") String code) {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
-            topicService.checkUserOwnTopic(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
-            TopicDTO topicDTO = topicMapper.entityToDTO(topicService.delete(code));
+            examService.checkUserOwnExam(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
+            ExamDTO examDTO = examMapper.entityToDTO(examService.delete(code));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
-                    .data(topicDTO)
+                    .data(examDTO)
                     .build();
             return Response.status(Response.Status.OK)
                     .entity(responseObject)

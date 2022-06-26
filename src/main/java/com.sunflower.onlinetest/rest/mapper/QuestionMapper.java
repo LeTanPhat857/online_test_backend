@@ -11,7 +11,6 @@ import java.util.List;
 public interface QuestionMapper {
 
     @Mappings({
-            @Mapping(target = "createdDate", source = "questionEntity.createdDate", dateFormat = "dd/MM/yyyy hh:mm:ss"),
             @Mapping(target = "answers", ignore = true)
     })
 

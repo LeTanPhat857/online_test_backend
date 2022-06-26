@@ -1,6 +1,5 @@
 package com.sunflower.onlinetest.entity;
 
-import com.sunflower.onlinetest.dao.iEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -24,6 +24,10 @@ public class TopicEntity implements iEntity {
     private String name;
 
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "topic_id")
+    private List<QuestionEntity> questions;
 
     @ManyToOne
     @JoinColumn(name = "owner_id", nullable = false)

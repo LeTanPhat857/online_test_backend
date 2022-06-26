@@ -1,6 +1,5 @@
 package com.sunflower.onlinetest.entity;
 
-import com.sunflower.onlinetest.dao.iEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

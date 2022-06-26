@@ -1,4 +1,4 @@
-package com.sunflower.onlinetest.dao;
+package com.sunflower.onlinetest.entity;
 
 public interface iEntity {
     Integer getId();

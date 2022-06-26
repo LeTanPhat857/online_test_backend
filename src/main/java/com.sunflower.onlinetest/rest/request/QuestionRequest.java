@@ -9,7 +9,6 @@ import java.util.List;
 @Setter
 public class QuestionRequest {
     private String content;
-//    private File attachedFile;
+    //    private File attachedFile;
     private List<AnswerRequest> answers;
-//    private List<AnswerRequest> rightAnswers;
 }

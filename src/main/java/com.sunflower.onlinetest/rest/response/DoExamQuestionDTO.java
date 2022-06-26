@@ -7,8 +7,8 @@ import java.util.List;
 
 @Getter
 @Setter
-public class QuestionDTO {
+public class DoExamQuestionDTO {
     private String code;
     private String content;
-    private List<AnswerDTO> answers;
+    private List<DoExamAnswerDTO> answers;
 }

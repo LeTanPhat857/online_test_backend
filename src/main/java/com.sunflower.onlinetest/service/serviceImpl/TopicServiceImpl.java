@@ -60,10 +60,10 @@ public class TopicServiceImpl implements TopicService {
     @Override
     public TopicEntity update(String code, TopicRequest topicRequest) {
         try {
-            Integer id = Integer.valueOf(CustomBase64.decode(code));
-            TopicEntity foundTopic = topicDAO.findById(id);
+            Integer topicId = CustomBase64.decodeAsInteger(code);
+            TopicEntity foundTopic = topicDAO.findById(topicId);
             if (Objects.isNull(foundTopic)) {
-                throw new RuntimeException("Topic could not found");
+                throw new RuntimeException("Topic could not found by Id: " + topicId);
             }
             foundTopic.setName(topicRequest.getName());
             foundTopic.setDescription(topicRequest.getDescription());

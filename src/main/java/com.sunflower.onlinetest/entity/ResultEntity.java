@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -15,24 +16,33 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "question")
-public class QuestionEntity implements iEntity {
+@Table(name = "result")
+public class ResultEntity implements iEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private String content;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "question_id")
-    private List<AnswerEntity> answers;
-
-    //  TODO  how to save file
-//    @Colum/n(name = "attached_file")
-//    private File attachedFile;
+    @Column(name = "number_of_doing_the_exam")
+    private int numberOfDoingTheExam;
 
     @ManyToOne
-    private TopicEntity topic;
+    private ExamEntity exam;
+
+    @Column(name = "start_time")
+    private LocalDateTime startTime;
+
+    @Column(name = "end_time")
+    private LocalDateTime endTime;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "submitted_result_id")
+    private List<SubmittedResultEntity> submittedResults;
+
+    private int numOfRightAnswer;
+
+    @ManyToOne
+    @JoinColumn(name = "exam_person_id")
+    private UserEntity examPerson;
 
     @CreationTimestamp
     @Column(name = "created_date")
