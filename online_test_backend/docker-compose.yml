@@ -1,0 +1,33 @@
+version: "3.9"
+services:
+  online_test_database:
+    container_name: mysql_database
+    image: mysql:8.0.28-oracle
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: $DATABASE_PASSWORD
+      MYSQL_DATABASE: $DATABASE_NAME
+    volumes:
+      - mysql:/var/lib/mysql
+    ports:
+      - "3456:3306"
+  online_test_server:
+    container_name: wildfly_server
+    image: letanphat857/online_test_backend:latest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      TZ: $SERVER_CONTAINER_TIME_ZONE
+    ports:
+      - "8910:8080"
+      - "9990:9990"
+    links:
+      - "online_test_database:online_test_database_link"
+    depends_on:
+      - online_test_database
+volumes:
+  mysql:
