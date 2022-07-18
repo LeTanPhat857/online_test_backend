@@ -1,8 +1,10 @@
 package com.sunflower.onlinetest.rest;
 
+import com.sunflower.onlinetest.rest.mapper.ExamDetailMapper;
 import com.sunflower.onlinetest.rest.mapper.ExamMapper;
 import com.sunflower.onlinetest.rest.request.ExamRequest;
 import com.sunflower.onlinetest.rest.response.ExamDTO;
+import com.sunflower.onlinetest.rest.response.ExamDetailDTO;
 import com.sunflower.onlinetest.rest.response.ResponseObject;
 import com.sunflower.onlinetest.service.ExamService;
 import com.sunflower.onlinetest.service.JWTAuthenticationService;
@@ -35,6 +37,9 @@ public class ExamREST {
     @Inject
     private ExamMapper examMapper;
 
+    @Inject
+    private ExamDetailMapper examDetailMapper;
+
     @GET
     @Path("")
     public Response getAllByUserId() {
@@ -64,7 +69,7 @@ public class ExamREST {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
             examService.checkUserOwnExam(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
-            ExamDTO examDTO = examMapper.entityToDTO(examService.getByCode(code));
+            ExamDetailDTO examDTO = examDetailMapper.entityToDTO(examService.getByCode(code));
             ResponseObject responseObject = ResponseObject.builder()
                     .message("successfully")
                     .data(examDTO)
@@ -131,7 +136,7 @@ public class ExamREST {
 
     @DELETE
     @Path("delete/{code}")
-    public Response update(@PathParam("code") String code) {
+    public Response delete(@PathParam("code") String code) {
         try {
             jwtAuthenticationService.checkAuthorizedToken(authorization);
             examService.checkUserOwnExam(jwtAuthenticationService.getUserId(authorization), CustomBase64.decodeAsInteger(code));
